@@ -141,10 +141,11 @@ public class BackgroundServicePluginLogic {
 		if(ACTION_GET_STATUS.equals(action)) result = true;
 
 		if(ACTION_RUN_ONCE.equals(action)) result = true;
+		if(ACTION_LAST_RESULTS.equals(action)) result = true;
 
 		if(ACTION_REGISTER_FOR_UPDATES.equals(action)) result = true;
 		if(ACTION_DEREGISTER_FOR_UPDATES.equals(action)) result = true;
-		if(ACTION_LAST_RESULTS.equals(action)) result = true;
+
 
 		return result;
 	}

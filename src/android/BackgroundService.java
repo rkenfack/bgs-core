@@ -154,23 +154,12 @@ public abstract class BackgroundService extends Service {
 		try {
 			tmp = lastResults();
 		} catch (Exception ex) {
-			Log.i(TAG, "Exception occurred during doWork()", ex);
+			Log.i(TAG, "Exception occurred during lastResults()", ex);
 		}
 
 		Log.i(TAG, "Syncing result");
 		setLatestResult(tmp);
 
-		// Now call the listeners
-		Log.i(TAG, "Sending to all listeners");
-		for (int i = 0; i < mListeners.size(); i++)
-		{
-			try {
-				mListeners.get(i).handleUpdate();
-				Log.i(TAG, "Sent listener - " + i);
-			} catch (RemoteException e) {
-				Log.i(TAG, "Failed to send to listener - " + i + " - " + e.getMessage());
-			}
-		}
 	}
 
 	/*
