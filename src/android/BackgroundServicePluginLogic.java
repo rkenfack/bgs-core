@@ -45,7 +45,7 @@ public class BackgroundServicePluginLogic {
 	public static final String ACTION_GET_STATUS = "getStatus";
 
 	public static final String ACTION_RUN_ONCE = "runOnce";
-	public static final String ACTION_LAST_RESULTS = "lastResults";
+	public static final String ACTION_LAST_RESULTS = "getLastResults";
 
 	public static final String ACTION_REGISTER_FOR_UPDATES = "registerForUpdates";
 	public static final String ACTION_DEREGISTER_FOR_UPDATES = "deregisterForUpdates";
