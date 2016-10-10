@@ -1,16 +1,16 @@
 /*
  * Copyright 2013 Red Folder Consultancy Ltd
- *   
- * Licensed under the Apache License, Version 2.0 (the "License");   
- * you may not use this file except in compliance with the License.   
- * You may obtain a copy of the License at       
- * 
- * 	http://www.apache.org/licenses/LICENSE-2.0   
  *
- * Unless required by applicable law or agreed to in writing, software   
- * distributed under the License is distributed on an "AS IS" BASIS,   
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   
- * See the License for the specific language governing permissions and   
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 
@@ -21,7 +21,7 @@ function BackgroundServiceFactory() { }
 
 BackgroundServiceFactory.prototype.create = function (serviceName) {
 	var exec = require("cordova/exec");
-	
+
 	var BackgroundService = function (serviceName) {
 		var ServiceName = serviceName;
 		this.getServiceName = function() {
@@ -48,15 +48,15 @@ BackgroundServiceFactory.prototype.create = function (serviceName) {
 
 	/**
 	  * Starts the Service
-	  * 
+	  *
 	  * @param successCallback The callback which will be called if the method is successful
 	  * @param failureCallback The callback which will be called if the method encounters an error
 	  */
-	BackgroundService.prototype.startService = function(successCallback, failureCallback) { 
-		return exec(	successCallback,      
-						failureCallback,      
-						'BackgroundServicePlugin',      
-						'startService',      
+	BackgroundService.prototype.startService = function(successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'startService',
 						[this.getServiceName()]);
 	};
 
@@ -66,11 +66,11 @@ BackgroundServiceFactory.prototype.create = function (serviceName) {
 	  * @param successCallback The callback which will be called if the method is successful
 	  * @param failureCallback The callback which will be called if the method encounters an error
 	  */
-	BackgroundService.prototype.stopService = function(successCallback, failureCallback) { 
-		return exec(	successCallback,      
-						failureCallback,      
-						'BackgroundServicePlugin',      
-						'stopService',      
+	BackgroundService.prototype.stopService = function(successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'stopService',
 						[this.getServiceName()]);
 	};
 
@@ -81,11 +81,11 @@ BackgroundServiceFactory.prototype.create = function (serviceName) {
 	  * @param successCallback The callback which will be called if the method is successful
 	  * @param failureCallback The callback which will be called if the method encounters an error
 	  */
-	BackgroundService.prototype.enableTimer = function(milliseconds, successCallback, failureCallback) { 
-		return exec(	successCallback,      
-						failureCallback,      
-						'BackgroundServicePlugin',      
-						'enableTimer',      
+	BackgroundService.prototype.enableTimer = function(milliseconds, successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'enableTimer',
 						[this.getServiceName(), milliseconds]);
 	};
 
@@ -95,11 +95,11 @@ BackgroundServiceFactory.prototype.create = function (serviceName) {
 	  * @param successCallback The callback which will be called if the method is successful
 	  * @param failureCallback The callback which will be called if the method encounters an error
 	  */
-	BackgroundService.prototype.disableTimer = function(successCallback, failureCallback) { 
-		return exec(	successCallback,      
-						failureCallback,      
-						'BackgroundServicePlugin',      
-						'disableTimer',      
+	BackgroundService.prototype.disableTimer = function(successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'disableTimer',
 						[this.getServiceName()]);
 	};
 
@@ -110,11 +110,11 @@ BackgroundServiceFactory.prototype.create = function (serviceName) {
 	  * @param successCallback The callback which will be called if the method is successful
 	  * @param failureCallback The callback which will be called if the method encounters an error
 	  */
-	BackgroundService.prototype.setConfiguration = function(configuration, successCallback, failureCallback) { 
-		return exec(	successCallback,      
-						failureCallback,      
-						'BackgroundServicePlugin',      
-						'setConfiguration',      
+	BackgroundService.prototype.setConfiguration = function(configuration, successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'setConfiguration',
 						[this.getServiceName(), configuration]);
 	};
 
@@ -124,11 +124,11 @@ BackgroundServiceFactory.prototype.create = function (serviceName) {
 	  * @param successCallback The callback which will be called if the method is successful
 	  * @param failureCallback The callback which will be called if the method encounters an error
 	  */
-	BackgroundService.prototype.registerForBootStart = function(successCallback, failureCallback) { 
-		return exec(	successCallback,      
-						failureCallback,      
-						'BackgroundServicePlugin',      
-						'registerForBootStart',      
+	BackgroundService.prototype.registerForBootStart = function(successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'registerForBootStart',
 						[this.getServiceName()]);
 	};
 
@@ -138,25 +138,25 @@ BackgroundServiceFactory.prototype.create = function (serviceName) {
 	  * @param successCallback The callback which will be called if the method is successful
 	  * @param failureCallback The callback which will be called if the method encounters an error
 	  */
-	BackgroundService.prototype.deregisterForBootStart = function(successCallback, failureCallback) { 
-		return exec(	successCallback,      
-						failureCallback,      
-						'BackgroundServicePlugin',      
-						'deregisterForBootStart',      
+	BackgroundService.prototype.deregisterForBootStart = function(successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'deregisterForBootStart',
 						[this.getServiceName()]);
 	};
 
 	/**
-	  * Get the current status of the service.	
-	  * 
+	  * Get the current status of the service.
+	  *
 	  * @param successCallback The callback which will be called if the method is successful
 	  * @param failureCallback The callback which will be called if the method encounters an error
 	  */
-	BackgroundService.prototype.isRegisteredForBootStart = function(successCallback, failureCallback) { 
-		return exec(	successCallback,      
-						failureCallback,      
-						'BackgroundServicePlugin',      
-						'isRegisteredForBootStart',      
+	BackgroundService.prototype.isRegisteredForBootStart = function(successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'isRegisteredForBootStart',
 						[this.getServiceName()]);
 	};
 
@@ -167,11 +167,11 @@ BackgroundServiceFactory.prototype.create = function (serviceName) {
 	  * @param successCallback The callback which will be called if the method is successful
 	  * @param failureCallback The callback which will be called if the method encounters an error
 	  */
-	BackgroundService.prototype.getStatus = function(successCallback, failureCallback) { 
-		return exec(	successCallback,      
-						failureCallback,      
-						'BackgroundServicePlugin',      
-						'getStatus',      
+	BackgroundService.prototype.getStatus = function(successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'getStatus',
 						[this.getServiceName()]);
 	};
 
@@ -181,13 +181,24 @@ BackgroundServiceFactory.prototype.create = function (serviceName) {
 	  * @param successCallback The callback which will be called if the method is successful
 	  * @param failureCallback The callback which will be called if the method encounters an error
 	  */
-	BackgroundService.prototype.runOnce = function(successCallback, failureCallback) { 
-		return exec(	successCallback,      
-						failureCallback,      
-						'BackgroundServicePlugin',      
-						'runOnce',      
+	BackgroundService.prototype.runOnce = function(successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'runOnce',
 						[this.getServiceName()]);
 	};
+
+
+	BackgroundService.prototype.getLastResults = function(successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'getLastResults',
+						[this.getServiceName()]);
+	};
+
+
 
 	/**
 	  * Registers for doWork() updates
@@ -195,11 +206,11 @@ BackgroundServiceFactory.prototype.create = function (serviceName) {
 	  * @param successCallback The callback which will be called if the method is successful
 	  * @param failureCallback The callback which will be called if the method encounters an error
 	  */
-	BackgroundService.prototype.registerForUpdates = function(successCallback, failureCallback) { 
-		return exec(	successCallback,      
-						failureCallback,      
-						'BackgroundServicePlugin',      
-						'registerForUpdates',      
+	BackgroundService.prototype.registerForUpdates = function(successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'registerForUpdates',
 						[this.getServiceName()]);
 	};
 
@@ -209,16 +220,16 @@ BackgroundServiceFactory.prototype.create = function (serviceName) {
 	  * @param successCallback The callback which will be called if the method is successful
 	  * @param failureCallback The callback which will be called if the method encounters an error
 	  */
-	BackgroundService.prototype.deregisterForUpdates = function(successCallback, failureCallback) { 
-		return exec(	successCallback,      
-						failureCallback,      
-						'BackgroundServicePlugin',      
-						'deregisterForUpdates',      
+	BackgroundService.prototype.deregisterForUpdates = function(successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'deregisterForUpdates',
 						[this.getServiceName()]);
 	};
 
 	var backgroundService = new BackgroundService(serviceName);
 	return backgroundService;
-}; 
+};
 
 module.exports = new BackgroundServiceFactory();

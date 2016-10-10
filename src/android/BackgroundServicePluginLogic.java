@@ -21,70 +21,73 @@ public class BackgroundServicePluginLogic {
 
 	/*
 	 ************************************************************************************************
-	 * Static values 
+	 * Static values
 	 ************************************************************************************************
 	 */
 	public static final String TAG = BackgroundServicePluginLogic.class.getSimpleName();
-	
+
 	/*
 	 ************************************************************************************************
-	 * Keys 
+	 * Keys
 	 ************************************************************************************************
 	 */
 	public static final String ACTION_START_SERVICE = "startService";
 	public static final String ACTION_STOP_SERVICE = "stopService";
-	
+
 	public static final String ACTION_ENABLE_TIMER = "enableTimer";
 	public static final String ACTION_DISABLE_TIMER = "disableTimer";
 
 	public static final String ACTION_SET_CONFIGURATION = "setConfiguration";
-	
+
 	public static final String ACTION_REGISTER_FOR_BOOTSTART = "registerForBootStart";
 	public static final String ACTION_DEREGISTER_FOR_BOOTSTART = "deregisterForBootStart";
-	
+
 	public static final String ACTION_GET_STATUS = "getStatus";
 
 	public static final String ACTION_RUN_ONCE = "runOnce";
+	public static final String ACTION_LAST_RESULTS = "lastResults";
 
 	public static final String ACTION_REGISTER_FOR_UPDATES = "registerForUpdates";
 	public static final String ACTION_DEREGISTER_FOR_UPDATES = "deregisterForUpdates";
-	
-	
+
+
+
+
 	public static final int ERROR_NONE_CODE = 0;
 	public static final String ERROR_NONE_MSG = "";
-	
+
 	public static final int ERROR_PLUGIN_ACTION_NOT_SUPPORTED_CODE = -1;
 	public static final String ERROR_PLUGIN_ACTION_NOT_SUPPORTED_MSG = "Passed action not supported by Plugin";
-	
+
 	public static final int ERROR_INIT_NOT_YET_CALLED_CODE = -2;
 	public static final String ERROR_INIT_NOT_YET_CALLED_MSG = "Please call init prior any other action";
-	
+
 	public static final int ERROR_SERVICE_NOT_RUNNING_CODE = -3;
 	public static final String ERROR_SERVICE_NOT_RUNNING_MSG = "Sevice not currently running";
-	
+
 	public static final int ERROR_UNABLE_TO_BIND_TO_BACKGROUND_SERVICE_CODE = -4;
 	public static final String ERROR_UNABLE_TO_BIND_TO_BACKGROUND_SERVICE_MSG ="Plugin unable to bind to background service";
-	
+
 	public static final int ERROR_UNABLE_TO_RETRIEVE_LAST_RESULT_CODE = -5;
 	public static final String ERROR_UNABLE_TO_RETRIEVE_LAST_RESULT_MSG = "Unable to retrieve latest result (reason unknown)";
-	
+
 	public static final int ERROR_LISTENER_ALREADY_REGISTERED_CODE = -6;
 	public static final String ERROR_LISTENER_ALREADY_REGISTERED_MSG = "Listener already registered";
-	
+
 	public static final int ERROR_LISTENER_NOT_REGISTERED_CODE = -7;
 	public static final String ERROR_LISTENER_NOT_REGISTERED_MSG = "Listener not registered";
 
 	public static final int ERROR_UNABLE_TO_CLOSED_LISTENER_CODE = -8;
 	public static final String ERROR_UNABLE_TO_CLOSED_LISTENER_MSG = "Unable to close listener";
-	
+
 	public static final int ERROR_ACTION_NOT_SUPPORTED__IN_PLUGIN_VERSION_CODE = -9;
 	public static final String ERROR_ACTION_NOT_SUPPORTED__IN_PLUGIN_VERSION_MSG = "Action is not supported in this version of the plugin";
 
 	public static final int ERROR_EXCEPTION_CODE = -99;
-	
+
 	/*
 	 ************************************************************************************************
-	 * Fields 
+	 * Fields
 	 ************************************************************************************************
 	 */
 	private Context mContext;
@@ -92,7 +95,7 @@ public class BackgroundServicePluginLogic {
 
 	/*
 	 ************************************************************************************************
-	 * Constructors 
+	 * Constructors
 	 ************************************************************************************************
 	 */
 	// Part fix for https://github.com/Red-Folder/Cordova-Plugin-BackgroundService/issues/19
@@ -105,42 +108,43 @@ public class BackgroundServicePluginLogic {
 
 	/*
 	 ************************************************************************************************
-	 * Public Methods 
+	 * Public Methods
 	 ************************************************************************************************
 	 */
-	
+
 	// Part fix for https://github.com/Red-Folder/Cordova-Plugin-BackgroundService/issues/19
 	//public void initialize(Context pContext) {
 	//	this.mContext = pContext;
 	//}
-	
+
 	//public boolean isInitialized() {
 	//	if (this.mContext == null)
 	//		return false;
 	//	else
 	//		return true;
 	//}
-	
+
 	public boolean isActionValid(String action) {
 		boolean result = false;
 
 		if(ACTION_START_SERVICE.equals(action)) result = true;
 		if(ACTION_STOP_SERVICE.equals(action)) result = true;
-		
+
 		if(ACTION_ENABLE_TIMER.equals(action)) result = true;
 		if(ACTION_DISABLE_TIMER.equals(action)) result = true;
 
 		if(ACTION_SET_CONFIGURATION.equals(action)) result = true;
-		
+
 		if(ACTION_REGISTER_FOR_BOOTSTART.equals(action)) result = true;
 		if(ACTION_DEREGISTER_FOR_BOOTSTART.equals(action)) result = true;
-		
+
 		if(ACTION_GET_STATUS.equals(action)) result = true;
 
 		if(ACTION_RUN_ONCE.equals(action)) result = true;
-		
+
 		if(ACTION_REGISTER_FOR_UPDATES.equals(action)) result = true;
 		if(ACTION_DEREGISTER_FOR_UPDATES.equals(action)) result = true;
+		if(ACTION_LAST_RESULTS).equals(action)) result = true;
 
 		return result;
 	}
@@ -151,7 +155,7 @@ public class BackgroundServicePluginLogic {
 
 	public ExecuteResult execute(String action, JSONArray data, IUpdateListener listener, Object[] listenerExtras) {
 		ExecuteResult result = null;
-		
+
 		Log.d(TAG, "Start of Execute");
 		try {
 			Log.d(TAG, "Withing try block");
@@ -161,13 +165,13 @@ public class BackgroundServicePluginLogic {
 					(data.getString(0).length() > 0)) {
 
 				String serviceName = data.getString(0);
-				
+
 				Log.d(TAG, "Finding servicename " + serviceName);
-				
+
 				ServiceDetails service = null;
 
 				Log.d(TAG, "Services contain " + this.mServices.size() + " records");
-				
+
 				if (this.mServices.containsKey(serviceName)) {
 					Log.d(TAG, "Found existing Service Details");
 					service = this.mServices.get(serviceName);
@@ -184,7 +188,7 @@ public class BackgroundServicePluginLogic {
 					service.initialise();
 
 				if (ACTION_GET_STATUS.equals(action)) result = service.getStatus();
-				
+
 				if (ACTION_START_SERVICE.equals(action)) result = service.startService();
 
 				if (ACTION_REGISTER_FOR_BOOTSTART.equals(action)) result = service.registerForBootStart();
@@ -198,7 +202,7 @@ public class BackgroundServicePluginLogic {
 
 					if (service != null && service.isServiceRunning()) {
 						Log.d(TAG, "Service is running?");
-						
+
 						if (ACTION_STOP_SERVICE.equals(action)) result = service.stopService();
 
 						if (ACTION_ENABLE_TIMER.equals(action)) result = service.enableTimer(data);
@@ -207,6 +211,7 @@ public class BackgroundServicePluginLogic {
 						if (ACTION_SET_CONFIGURATION.equals(action)) result = service.setConfiguration(data);
 
 						if (ACTION_RUN_ONCE.equals(action)) result = service.runOnce();
+						if (ACTION_LAST_RESULTS.equals(action)) result = service.getLastResults();
 
 					} else {
 						result = new ExecuteResult(ExecuteStatus.INVALID_ACTION);
@@ -228,19 +233,19 @@ public class BackgroundServicePluginLogic {
 	}
 
 	public void onDestroy() {
-		
+
 		Log.d(TAG, "On Destroy Start");
 		try {
 			Log.d(TAG, "Checking for services");
-			if (this.mServices != null && 
+			if (this.mServices != null &&
 				this.mServices.size() > 0 ) {
 
 				Log.d(TAG, "Found services");
 
 				Enumeration<String> keys = this.mServices.keys();
-				
+
 				while( keys.hasMoreElements() ) {
-					String key = keys.nextElement();  
+					String key = keys.nextElement();
 					ServiceDetails service = this.mServices.get(key);
 					Log.d(TAG, "Calling service.close()");
 					service.close();
@@ -251,52 +256,52 @@ public class BackgroundServicePluginLogic {
 			// even if we failed to destroy something, we need to continue destroying
 			Log.d(TAG, "Error has occurred while trying to close services", t);
 		}
-		
-		
+
+
 		this.mServices = null;
 		Log.d(TAG, "On Destroy Finish");
-		
+
 	}
 
 
 	/*
 	 ************************************************************************************************
-	 * Internal Class 
+	 * Internal Class
 	 ************************************************************************************************
 	 */
 	protected class ServiceDetails {
 		/*
 		 ************************************************************************************************
-		 * Static values 
+		 * Static values
 		 ************************************************************************************************
 		 */
 		public final String LOCALTAG = BackgroundServicePluginLogic.ServiceDetails.class.getSimpleName();
-		
+
 		/*
 		 ************************************************************************************************
-		 * Fields 
+		 * Fields
 		 ************************************************************************************************
 		 */
 		private String mServiceName = "";
 		private Context mContext;
-		
+
 		private BackgroundServiceApi mApi;
 
 		private String mUniqueID = java.util.UUID.randomUUID().toString();
-		
+
 		private boolean mInitialised = false;
-		
+
 		private Intent mService = null;
-		
+
 		private Object mServiceConnectedLock = new Object();
 		private Boolean mServiceConnected = null;
 
 		private IUpdateListener mListener = null;
 		private Object[] mListenerExtras = null;
-				
+
 		/*
 		 ************************************************************************************************
-		 * Constructors 
+		 * Constructors
 		 ************************************************************************************************
 		 */
 		public ServiceDetails(Context context, String serviceName)
@@ -304,22 +309,22 @@ public class BackgroundServicePluginLogic {
 			this.mContext = context;
 			this.mServiceName = serviceName;
 		}
-		
+
 		/*
 		 ************************************************************************************************
-		 * Public Methods 
+		 * Public Methods
 		 ************************************************************************************************
 		 */
 		public void initialise()
 		{
 			this.mInitialised = true;
-			
+
 			// If the service is running, then automatically bind to it
 			if (this.isServiceRunning()) {
 				startService();
 			}
 		}
-		
+
 		public boolean isInitialised()
 		{
 			return mInitialised;
@@ -329,7 +334,7 @@ public class BackgroundServicePluginLogic {
 		{
 			Log.d(LOCALTAG, "Starting startService");
 			ExecuteResult result = null;
-			
+
 			try {
 				Log.d(LOCALTAG, "Attempting to bind to Service");
 				if (this.bindToService()) {
@@ -343,22 +348,22 @@ public class BackgroundServicePluginLogic {
 				Log.d(LOCALTAG, "startService failed", ex);
 				result = new ExecuteResult(ExecuteStatus.ERROR, createJSONResult(false, ERROR_EXCEPTION_CODE, ex.getMessage()));
 			}
-			
+
 			Log.d(LOCALTAG, "Finished startService");
 			return result;
 		}
-		
+
 		public ExecuteResult stopService()
 		{
 			ExecuteResult result = null;
-			
+
 			Log.d("ServiceDetails", "stopService called");
 
 			try {
-				
+
 				Log.d("ServiceDetails", "Unbinding Service");
 				this.mContext.unbindService(serviceConnection);
-				
+
 				Log.d("ServiceDetails", "Stopping service");
 				if (this.mContext.stopService(this.mService))
 				{
@@ -371,10 +376,10 @@ public class BackgroundServicePluginLogic {
 				Log.d(LOCALTAG, "stopService failed", ex);
 				result = new ExecuteResult(ExecuteStatus.ERROR, createJSONResult(false, ERROR_EXCEPTION_CODE, ex.getMessage()));
 			}
-			
+
 			return result;
 		}
-		
+
 		public ExecuteResult enableTimer(JSONArray data)
 		{
 			ExecuteResult result = null;
@@ -394,7 +399,7 @@ public class BackgroundServicePluginLogic {
 		public ExecuteResult disableTimer()
 		{
 			ExecuteResult result = null;
-		
+
 			try {
 				mApi.disableTimer();
 				result = new ExecuteResult(ExecuteStatus.OK, createJSONResult(true, ERROR_NONE_CODE, ERROR_NONE_MSG));
@@ -409,7 +414,7 @@ public class BackgroundServicePluginLogic {
 		public ExecuteResult registerForBootStart()
 		{
 			ExecuteResult result = null;
-		
+
 			try {
 				PropertyHelper.addBootService(this.mContext, this.mServiceName);
 
@@ -421,11 +426,11 @@ public class BackgroundServicePluginLogic {
 
 			return result;
 		}
-		
+
 		public ExecuteResult deregisterForBootStart()
 		{
 			ExecuteResult result = null;
-		
+
 			try {
 				PropertyHelper.removeBootService(this.mContext, this.mServiceName);
 
@@ -437,11 +442,11 @@ public class BackgroundServicePluginLogic {
 
 			return result;
 		}
-		
+
 		public ExecuteResult setConfiguration(JSONArray data)
 		{
 			ExecuteResult result = null;
-			
+
 			try {
 				if (this.isServiceRunning()) {
 					Object obj;
@@ -460,23 +465,44 @@ public class BackgroundServicePluginLogic {
 				Log.d(LOCALTAG, "setConfiguration failed", ex);
 				result = new ExecuteResult(ExecuteStatus.ERROR, createJSONResult(false, ERROR_EXCEPTION_CODE, ex.getMessage()));
 			}
-			
+
 			return result;
 		}
 
 		public ExecuteResult getStatus()
 		{
 			ExecuteResult result = null;
-			
+
 			result = new ExecuteResult(ExecuteStatus.OK, createJSONResult(true, ERROR_NONE_CODE, ERROR_NONE_MSG));
-			
+
 			return result;
 		}
-		
+
+		public ExecuteResult getLastResults()
+		{
+			ExecuteResult result = null;
+
+			try {
+				if (this.isServiceRunning()) {
+					mApi.run();
+					result = new ExecuteResult(ExecuteStatus.OK, createJSONResult(true, ERROR_NONE_CODE, ERROR_NONE_MSG));
+				} else {
+					result = new ExecuteResult(ExecuteStatus.INVALID_ACTION, createJSONResult(false, ERROR_SERVICE_NOT_RUNNING_CODE, ERROR_SERVICE_NOT_RUNNING_MSG));
+				}
+			} catch (RemoteException ex) {
+				Log.d(LOCALTAG, "getLastResults failed", ex);
+				result = new ExecuteResult(ExecuteStatus.ERROR, createJSONResult(false, ERROR_EXCEPTION_CODE, ex.getMessage()));
+			}
+
+			return result;
+		}
+
+
+
 		public ExecuteResult runOnce()
 		{
 			ExecuteResult result = null;
-			
+
 			try {
 				if (this.isServiceRunning()) {
 					mApi.run();
@@ -488,26 +514,28 @@ public class BackgroundServicePluginLogic {
 				Log.d(LOCALTAG, "runOnce failed", ex);
 				result = new ExecuteResult(ExecuteStatus.ERROR, createJSONResult(false, ERROR_EXCEPTION_CODE, ex.getMessage()));
 			}
-			
+
 			return result;
 		}
+
+
 
 		public ExecuteResult registerForUpdates(IUpdateListener listener, Object[] listenerExtras)
 		{
 			ExecuteResult result = null;
 			try {
-				
+
 				// Check for if the listener is null
 				// If it is then it will be because the Plguin version doesn't support the method
 				if (listener == null) {
 					result = new ExecuteResult(ExecuteStatus.INVALID_ACTION, createJSONResult(false, ERROR_ACTION_NOT_SUPPORTED__IN_PLUGIN_VERSION_CODE, ERROR_ACTION_NOT_SUPPORTED__IN_PLUGIN_VERSION_MSG));
 				} else {
-					
+
 					// If a listener already exists, then we fist need to deregister the original
 					// Ignore any failures (likely due to the listener not being available anymore)
-					if (this.isRegisteredForUpdates()) 
+					if (this.isRegisteredForUpdates())
 						this.deregisterListener();
-				
+
 					this.mListener = listener;
 					this.mListenerExtras = listenerExtras;
 
@@ -517,10 +545,10 @@ public class BackgroundServicePluginLogic {
 				Log.d(LOCALTAG, "regsiterForUpdates failed", ex);
 				result = new ExecuteResult(ExecuteStatus.ERROR, createJSONResult(false, ERROR_EXCEPTION_CODE, ex.getMessage()));
 			}
-			
+
 			return result;
 		}
-		
+
 		public ExecuteResult deregisterForUpdates()
 		{
 			ExecuteResult result = null;
@@ -532,12 +560,12 @@ public class BackgroundServicePluginLogic {
 						result = new ExecuteResult(ExecuteStatus.ERROR, createJSONResult(false, ERROR_UNABLE_TO_CLOSED_LISTENER_CODE, ERROR_UNABLE_TO_CLOSED_LISTENER_MSG));
 				else
 					result = new ExecuteResult(ExecuteStatus.INVALID_ACTION, createJSONResult(false, ERROR_LISTENER_NOT_REGISTERED_CODE, ERROR_LISTENER_NOT_REGISTERED_MSG));
-				
+
 			} catch (Exception ex) {
 				Log.d(LOCALTAG, "deregsiterForUpdates failed", ex);
 				result = new ExecuteResult(ExecuteStatus.ERROR, createJSONResult(false, ERROR_EXCEPTION_CODE, ex.getMessage()));
 			}
-			
+
 			return result;
 		}
 
@@ -550,7 +578,7 @@ public class BackgroundServicePluginLogic {
 			try {
 				// Remove the lister to this publisher
 				this.deregisterListener();
-				
+
 				Log.d("ServiceDetails", "Removing ServiceListener");
 				mApi.removeListener(serviceListener);
 				Log.d("ServiceDetails", "Removing ServiceConnection");
@@ -576,27 +604,27 @@ public class BackgroundServicePluginLogic {
 				} catch (Exception ex) {
 					Log.d("ServiceDetails", "Error occurred while closing the listener", ex);
 				}
-				
+
 				this.mListener = null;
 				this.mListenerExtras = null;
 				Log.d("ServiceDetails", "Listener deregistered");
-				
+
 				result = true;
 			}
-			
+
 			return result;
 		}
 
 		/*
 		 ************************************************************************************************
-		 * Private Methods 
+		 * Private Methods
 		 ************************************************************************************************
 		 */
 		private boolean bindToService() {
 			boolean result = false;
-			
+
 			Log.d(LOCALTAG, "Starting bindToService");
-			
+
 			try {
 				// Fix to https://github.com/Red-Folder/bgs-core/issues/18
 				// Gets the class from string
@@ -628,7 +656,7 @@ public class BackgroundServicePluginLogic {
 
 			return result;
 		}
-		
+
 		private ServiceConnection serviceConnection = new ServiceConnection() {
 			@Override
 			public void onServiceConnected(ComponentName name, IBinder service) {
@@ -639,7 +667,7 @@ public class BackgroundServicePluginLogic {
 				} catch (RemoteException e) {
 					Log.d(LOCALTAG, "addListener failed", e);
 				}
-				
+
 				synchronized(mServiceConnectedLock) {
 					mServiceConnected = true;
 
@@ -672,10 +700,10 @@ public class BackgroundServicePluginLogic {
 
 		private void handleLatestResult() {
 			Log.d("ServiceDetails", "Latest results received");
-			
+
 			if (this.isRegisteredForUpdates()) {
 				Log.d("ServiceDetails", "Calling listener");
-				
+
 				ExecuteResult result = new ExecuteResult(ExecuteStatus.OK, createJSONResult(true, ERROR_NONE_CODE, ERROR_NONE_MSG), false);
 				try {
 					this.mListener.handleUpdate(result, this.mListenerExtras);
@@ -719,22 +747,22 @@ public class BackgroundServicePluginLogic {
 
 			try { result.put("RegisteredForBootStart", isRegisteredForBootStart()); } catch (Exception ex) {Log.d(LOCALTAG, "Adding RegisteredForBootStart to JSONObject failed", ex);};
 			try { result.put("RegisteredForUpdates", isRegisteredForUpdates()); } catch (Exception ex) {Log.d(LOCALTAG, "Adding RegisteredForUpdates to JSONObject failed", ex);};
-				
+
 			return result;
 		}
-		
+
 		private boolean isServiceRunning()
 		{
 			boolean result = false;
-			
+
 			try {
 				// Return Plugin with ServiceRunning true/ false
-				ActivityManager manager = (ActivityManager)this.mContext.getSystemService(Context.ACTIVITY_SERVICE); 
-				for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) { 
-					if (this.mServiceName.equals(service.service.getClassName())) { 
-						result = true; 
-					} 
-				} 
+				ActivityManager manager = (ActivityManager)this.mContext.getSystemService(Context.ACTIVITY_SERVICE);
+				for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+					if (this.mServiceName.equals(service.service.getClassName())) {
+						result = true;
+					}
+				}
 			} catch (Exception ex) {
 				Log.d(LOCALTAG, "isServiceRunning failed", ex);
 			}
@@ -745,20 +773,20 @@ public class BackgroundServicePluginLogic {
 		private Boolean isTimerEnabled()
 		{
 			Boolean result = false;
-			
+
 			try {
 				result = mApi.isTimerEnabled();
 			} catch (Exception ex) {
 				Log.d(LOCALTAG, "isTimerEnabled failed", ex);
 			}
-			
+
 			return result;
 		}
 
 		private Boolean isRegisteredForBootStart()
 		{
 			Boolean result = false;
-		
+
 			try {
 				result = PropertyHelper.isBootService(this.mContext, this.mServiceName);
 			} catch (Exception ex) {
@@ -779,14 +807,14 @@ public class BackgroundServicePluginLogic {
 		private JSONObject getConfiguration()
 		{
 			JSONObject result = null;
-			
+
 			try {
 				String data = mApi.getConfiguration();
 				result = new JSONObject(data);
 			} catch (Exception ex) {
 				Log.d(LOCALTAG, "getConfiguration failed", ex);
 			}
-			
+
 			return result;
 		}
 
@@ -807,13 +835,13 @@ public class BackgroundServicePluginLogic {
 		private int getTimerMilliseconds()
 		{
 			int result = -1;
-			
+
 			try {
 				result = mApi.getTimerMilliseconds();
 			} catch (Exception ex) {
 				Log.d(LOCALTAG, "getTimerMilliseconds failed", ex);
 			}
-			
+
 			return result;
 		}
 
@@ -823,7 +851,7 @@ public class BackgroundServicePluginLogic {
 
 		/*
 		 ************************************************************************************************
-		 * Fields 
+		 * Fields
 		 ************************************************************************************************
 		 */
 		private ExecuteStatus mStatus;
@@ -833,19 +861,19 @@ public class BackgroundServicePluginLogic {
 		public ExecuteStatus getStatus() {
 			return this.mStatus;
 		}
-		
+
 		public void setStatus(ExecuteStatus pStatus) {
 			this.mStatus = pStatus;
 		}
-		
+
 		public JSONObject getData() {
 			return this.mData;
 		}
-		
+
 		public void setData(JSONObject pData) {
 			this.mData = pData;
 		}
-		
+
 		public boolean isFinished() {
 			return this.mFinished;
 		}
@@ -853,16 +881,16 @@ public class BackgroundServicePluginLogic {
 		public void setFinished(boolean pFinished) {
 			this.mFinished = pFinished;
 		}
-		
+
 		/*
 		 ************************************************************************************************
-		 * Constructors 
+		 * Constructors
 		 ************************************************************************************************
 		 */
 		public ExecuteResult(ExecuteStatus pStatus) {
 			this.mStatus = pStatus;
 		}
-		
+
 		public ExecuteResult(ExecuteStatus pStatus, JSONObject pData) {
 			this.mStatus = pStatus;
 			this.mData = pData;
@@ -880,10 +908,10 @@ public class BackgroundServicePluginLogic {
 		public void handleUpdate(ExecuteResult logicResult, Object[] listenerExtras);
 		public void closeListener(ExecuteResult logicResult, Object[] listenerExtras);
 	}
-	
+
 	/*
 	 ************************************************************************************************
-	 * Enums 
+	 * Enums
 	 ************************************************************************************************
 	 */
 	protected enum ExecuteStatus {
